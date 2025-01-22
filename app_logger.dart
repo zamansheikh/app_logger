@@ -24,59 +24,38 @@ class AppLogger {
     ),
   );
 
+  /// Ensures the message is safely converted to a string for logging.
+  static String _safeToString(dynamic message) {
+    try {
+      return message?.toString() ?? 'null';
+    } catch (e) {
+      return 'Error converting message to string: $e';
+    }
+  }
+
   /// Logs a debug message.
-  ///
-  /// Use this to log general information for debugging purposes.
-  ///
-  /// - [message]: The message to log.
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   static void d(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.d(message, error: error, stackTrace: stackTrace);
+    _logger.d(_safeToString(message), error: error, stackTrace: stackTrace);
   }
 
   /// Logs an informational message.
-  ///
-  /// Use this to log informational messages or normal app events.
-  ///
-  /// - [message]: The message to log.
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   static void i(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.i(message, error: error, stackTrace: stackTrace);
+    _logger.i(_safeToString(message), error: error, stackTrace: stackTrace);
   }
 
   /// Logs a warning message.
-  ///
-  /// Use this to log potential issues that may need attention.
-  ///
-  /// - [message]: The message to log.
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   static void w(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.w(message, error: error, stackTrace: stackTrace);
+    _logger.w(_safeToString(message), error: error, stackTrace: stackTrace);
   }
 
   /// Logs an error message.
-  ///
-  /// Use this to log errors and exceptions.
-  ///
-  /// - [message]: The message to log.
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   static void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.e(message, error: error, stackTrace: stackTrace);
+    _logger.e(_safeToString(message), error: error, stackTrace: stackTrace);
   }
 
   /// Logs a fatal error message.
-  ///
-  /// Use this to log critical issues that cause application crashes.
-  ///
-  /// - [message]: The message to log.
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   static void f(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _logger.f(message, error: stackTrace);
+    _logger.f(_safeToString(message), error: stackTrace);
   }
 }
 
@@ -89,45 +68,35 @@ class AppLogger {
 /// ```dart
 /// "A debug message".logD();
 /// 123.logI();
+/// {"key": "value"}.logW();
 /// ```
 extension Loggable on Object {
-  /// Logs a debug message using the current object.
-  ///
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
+  /// Ensures the current object is safely converted to a string for logging.
+  String _safeToString() {
+    try {
+      return this.toString();
+    } catch (e) {
+      return 'Error converting object to string: $e';
+    }
+  }
+
   void logD([dynamic error, StackTrace? stackTrace]) {
-    AppLogger.d(this, error, stackTrace);
+    AppLogger.d(_safeToString(), error, stackTrace);
   }
 
-  /// Logs an informational message using the current object.
-  ///
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   void logI([dynamic error, StackTrace? stackTrace]) {
-    AppLogger.i(this, error, stackTrace);
+    AppLogger.i(_safeToString(), error, stackTrace);
   }
 
-  /// Logs a warning message using the current object.
-  ///
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   void logW([dynamic error, StackTrace? stackTrace]) {
-    AppLogger.w(this, error, stackTrace);
+    AppLogger.w(_safeToString(), error, stackTrace);
   }
 
-  /// Logs an error message using the current object.
-  ///
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   void logE([dynamic error, StackTrace? stackTrace]) {
-    AppLogger.e(this, error, stackTrace);
+    AppLogger.e(_safeToString(), error, stackTrace);
   }
 
-  /// Logs a fatal error message using the current object.
-  ///
-  /// - [error]: (Optional) An error object to include in the log.
-  /// - [stackTrace]: (Optional) A stack trace to include in the log.
   void logF([dynamic error, StackTrace? stackTrace]) {
-    AppLogger.f(this, error, stackTrace);
+    AppLogger.f(_safeToString(), error, stackTrace);
   }
 }
